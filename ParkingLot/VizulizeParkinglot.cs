@@ -7,8 +7,8 @@ namespace ParkingLot
     public class VizulizeParkinglot
     {
         private readonly int[,] parkingArray;
-        private List<Vehicle> vehicles;
-        public new enum Types
+        private readonly List<Vehicle> vehicles;
+        public enum Types
         {
             E, C, m
         }

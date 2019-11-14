@@ -219,7 +219,7 @@ namespace ParkingLot
         {
             // find all optimize opertunities and present in an array.
             List<int> optimizeChoises = FindOptimizeMcChoises();
-            int numChoises = optimizeChoises.Count;
+            int numChoises;
             if (optimizeChoises.Count % 2 == 1)
             {
                 numChoises = (optimizeChoises.Count - 1) / 2;

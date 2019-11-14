@@ -22,7 +22,6 @@ namespace ParkingLot.Tests
             Mock<IUserInput> inputMock = new Mock<IUserInput>();
 
             Organizer organizer = new Organizer((IUserInput)inputMock.Object);
-            UserInputStub userInput = new UserInputStub();
             inputMock.Setup(p => p.AskForType()).Returns(true);
 
             for (int i = 0; i < 100; i++)
@@ -31,7 +30,6 @@ namespace ParkingLot.Tests
 
                 organizer.UserAddVehicle();
             }
-            userInput.RegNum = $"abcdtest";
             inputMock.Setup(p => p.AskForReg()).Returns("abcdtest");
 
             Assert.AreEqual(false, organizer.UserAddVehicle());
@@ -169,48 +167,48 @@ namespace ParkingLot.Tests
             Assert.AreEqual(expecHour, organizer.vehicles[1].StartTime.Hour);
             Assert.AreEqual(expecMin, organizer.vehicles[1].StartTime.Minute);
         }
-        
-                [TestMethod()]
-                public void UserMoveMcTest()
-                {
-                    Organizer organizer = new Organizer(new UserInput()); 
-                    AddVehicle(organizer, false, "MC123");
-                    Assert.AreEqual(true, organizer.vehicles[0].FillsWholeSpace == false);
 
-                    AddVehicle(organizer, false, "MC234");
+        [TestMethod()]
+        public void UserMoveMcTest()
+        {
+            Organizer organizer = new Organizer(new UserInput());
+            AddVehicle(organizer, false, "MC123");
+            Assert.AreEqual(true, organizer.vehicles[0].FillsWholeSpace == false);
 
-
-
-                    // And a car
-                    AddVehicle(organizer, true, "ABC123");
+            AddVehicle(organizer, false, "MC234");
 
 
 
-                    organizer.vehicles = new List<Vehicle>();
-
-                    organizer.RestoreFromFile();
-
-                // Will move MC123
-                    MoveVehicle(organizer, false, "MC123", 3);
+            // And a car
+            AddVehicle(organizer, true, "ABC123");
 
 
-                    Assert.AreEqual(true, organizer.vehicles[2].IsCar == true);
-                    Assert.AreEqual(true, organizer.vehicles[2].FillsWholeSpace == true);
-                    Assert.AreEqual(true, organizer.vehicles[2].RegNum == "ABC123");
+
+            organizer.vehicles = new List<Vehicle>();
+
+            organizer.RestoreFromFile();
+
+            // Will move MC123
+            MoveVehicle(organizer, false, "MC123", 3);
 
 
-                    Assert.AreEqual(true, organizer.vehicles[0].IsCar == false);
-                    Assert.AreEqual(true, organizer.vehicles[1].IsCar == false);
-                    Assert.AreEqual(true, organizer.vehicles[0].FillsWholeSpace == false);
-                    Assert.AreEqual(true, organizer.vehicles[1].FillsWholeSpace == false);
-                    Assert.AreEqual(true, organizer.vehicles[0].RegNum == "MC123");
-                    Assert.AreEqual(true, organizer.vehicles[1].RegNum == "MC234");
-                    // Kollar ifall fordonen flyttades till rätt plattser.
-                    Assert.AreEqual(3, organizer.vehicles[0].ParkingNum);
-                    Assert.AreEqual(0, organizer.vehicles[1].ParkingNum);
-                }
+            Assert.AreEqual(true, organizer.vehicles[2].IsCar == true);
+            Assert.AreEqual(true, organizer.vehicles[2].FillsWholeSpace == true);
+            Assert.AreEqual(true, organizer.vehicles[2].RegNum == "ABC123");
 
-         
+
+            Assert.AreEqual(true, organizer.vehicles[0].IsCar == false);
+            Assert.AreEqual(true, organizer.vehicles[1].IsCar == false);
+            Assert.AreEqual(true, organizer.vehicles[0].FillsWholeSpace == false);
+            Assert.AreEqual(true, organizer.vehicles[1].FillsWholeSpace == false);
+            Assert.AreEqual(true, organizer.vehicles[0].RegNum == "MC123");
+            Assert.AreEqual(true, organizer.vehicles[1].RegNum == "MC234");
+            // Kollar ifall fordonen flyttades till rätt plattser.
+            Assert.AreEqual(3, organizer.vehicles[0].ParkingNum);
+            Assert.AreEqual(0, organizer.vehicles[1].ParkingNum);
+        }
+
+
         [TestMethod()]
         public void UserOptimizeTest()
         {
@@ -332,8 +330,8 @@ namespace ParkingLot.Tests
             mock.Setup(p => p.AskForType()).Returns(isCar);
             mock.Setup(p => p.BackToMenu()).Returns(true);
             mock.Setup(p => p.AskForNumber(1, 3))
-                .Returns(moveToIndex + 1);mock.Setup(p => p.AskForNumber(1, 100))
-                .Returns(moveToIndex + 1);
+                .Returns(moveToIndex + 1); mock.Setup(p => p.AskForNumber(1, 100))
+                 .Returns(moveToIndex + 1);
 
 
             //UserInputStub userInput = new UserInputStub();
@@ -354,9 +352,9 @@ namespace ParkingLot.Tests
             mock.Setup(p => p.BackToMenu()).Returns(true);
             mock.Setup(p => p.AskForNumber(0, 100))
                 .Returns(userOptimizeChoise);
-            
 
-            organizer.userInput = (IUserInput) mock.Object;
+
+            organizer.userInput = (IUserInput)mock.Object;
 
             organizer.UserOptimizeMcSpace();
 
