@@ -10,50 +10,49 @@ namespace ParkingLot
     {
         static void Main(string[] args)
         {
-            Menu menu = new Menu();
-        }
-        
+            ParkingMenu menu = new ParkingMenu();
+            menu.Menu();
+            //   TestIncomeReport();
+            TestDataGenerator testDataGenerator = new TestDataGenerator();
+            testDataGenerator.TestData();
 
-        static void TestPrice()
+            //database.MoveVehicle("en bil", 13);
+            //DateTime startDate = DateTime.Now;
+            //startDate = startDate.AddDays(-4);
+            //DateTime endDate = DateTime.Now;
+            //database.Commit();
+            //database.FetchVehicleInfo("en bil");
+        }
+
+        private static void TestIncomeReport()
         {
-            DateTime dateTime = DateTime.Now;
-            dateTime = dateTime.AddHours(-3);
-            Vehicle vehicle = new Vehicle("", true,false, dateTime);
+            DbHandler database = new DbHandler();
+            DateTime startDate = AskForDate("2020/02/06");
+            DateTime endDate = AskForDate("20sdfds20/02/09");
 
-            Console.WriteLine("En {2} som ståt parkerad i {0} timmar kostar {1} kronor.",3,CalculatePrice.GetCost(vehicle), "bil");
-            
-            dateTime = DateTime.Now;
-            dateTime = dateTime.AddHours(-3);
-            dateTime = dateTime.AddMinutes(-10);
-            vehicle = new Vehicle("", true,false, dateTime);
+            decimal[] earninsReport = database.FetchEarningsSum(startDate, endDate);
+            Console.Clear();
+            foreach (decimal row in earninsReport)
+            {
+                string income = row.ToString();
+                income = income.Substring(0, income.IndexOf(',') + 3);
+                Console.WriteLine(income + " kronor.");
 
-            Console.WriteLine("En {2} som stått parkerad i {0} kostar {1} kronor.","3 timmar och 10 minuter",CalculatePrice.GetCost(vehicle), "bil");
-            
-            dateTime = DateTime.Now;
-            dateTime = dateTime.AddHours(-113);
-            dateTime = dateTime.AddMinutes(-10);
-            vehicle = new Vehicle("", true,false, dateTime);
-
-            Console.WriteLine("En {2} som stått parkerad i {0} kostar {1} kronor.","113 timmar och 10 minuter",CalculatePrice.GetCost(vehicle), "bil");
-            
-            dateTime = DateTime.Now;
-            dateTime = dateTime.AddHours(-2);
-            vehicle = new Vehicle("", false,false, dateTime);
-
-            Console.WriteLine("En {2} som stått parkerad i {0} kostar {1} kronor.","2 timmar och 0 minuter",CalculatePrice.GetCost(vehicle), "MC");
-            dateTime = DateTime.Now;
-            dateTime = dateTime.AddHours(-1);
-            dateTime = dateTime.AddMinutes(-10);
-            vehicle = new Vehicle("", false,false, dateTime);
-
-            Console.WriteLine("En {2} som stått parkerad i {0} kostar {1} kronor.","1 timme och 10 minuter",CalculatePrice.GetCost(vehicle), "MC");
-            
-            dateTime = DateTime.Now;
-            dateTime = dateTime.AddMinutes(-4);
-            vehicle = new Vehicle("", false,false, dateTime);
-
-            Console.WriteLine("En {2} som stått parkerad i {0} timmar kostar {1} kronor.","4 minuter",CalculatePrice.GetCost(vehicle), "MC");
-            
+            }
         }
+
+        public static DateTime AskForDate(string input)
+        {
+            string date = input;
+            try
+            {
+                return DateTime.Parse(date);
+            }
+            catch
+            {
+                return AskForDate(input);
+            }
+        }
+
     }
 }

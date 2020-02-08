@@ -8,22 +8,26 @@ namespace ParkingLot
         private const float priceMc = 10;
 
 
-        public static float GetCost(Vehicle vehicle)
+        public static float GetCost(DateTime dt, bool isCar)
         {
-            DateTime dt = vehicle.StartTime;
             DateTime currentDt = DateTime.Now;
+            return GetCost(dt, currentDt, isCar);
+        }
+
+        public static float GetCost(DateTime inDateTime, DateTime outDate, bool isCar)
+        {
             int minutes = 0, hours = 1;
+            DateTime inDate = inDateTime;
 
-
-            while (dt.Hour < currentDt.Hour || dt.DayOfYear != currentDt.DayOfYear)
+            while (inDate.Hour < outDate.Hour || inDate.DayOfYear != outDate.DayOfYear)
             {
                 hours++;
-                dt = dt.AddHours(1);
+                inDate = inDate.AddHours(1);
             }
-            while (dt.Minute < currentDt.Minute)
+            while (inDate.Minute < outDate.Minute)
             {
                 minutes++;
-                dt = dt.AddMinutes(1);
+                inDate = inDate.AddMinutes(1);
             }
 
 
@@ -34,25 +38,25 @@ namespace ParkingLot
 
             if (hours > 2)
             {
-                float price = vehicle.IsCar ? priceCar : priceMc;
+                float price = isCar ? priceCar : priceMc;
 
 
                 float cost = hours * price;
-                
+
                 return cost;
             }
-            
+
             if (hours <= 2)
             {
-                return CalcDefaultPrice(vehicle);
+                return CalcDefaultPrice(isCar);
             }
             return -1;
         }
 
-        private static float CalcDefaultPrice(Vehicle vehicle)
+        private static float CalcDefaultPrice(bool isCar)
         {
             float price;
-            if (vehicle.IsCar)
+            if (isCar)
             {
                 price = 2 * priceCar;
             }

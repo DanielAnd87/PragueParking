@@ -178,7 +178,7 @@ namespace ParkingLot
         {
             //todo: fix wrong price for vehicles just arived.
             // todo: fix visuliser!
-            Console.WriteLine("Price: {0:F2} koruna", CalculatePrice.GetCost(vehicle));
+            //Console.WriteLine("Price: {0:F2} koruna", CalculatePrice.GetCost(vehicle));
         }
     }
 }
