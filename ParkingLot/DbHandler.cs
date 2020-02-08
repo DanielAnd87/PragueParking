@@ -446,7 +446,7 @@ namespace ParkingLot
 
         internal string CheckInVehicle(string regNum, int carType)
         {
-            string searchReport = "Finns redan!";
+            string searchReport = "Något gick fel!";
             int rowsAffected = 0;
             using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -467,9 +467,24 @@ namespace ParkingLot
                 command.Parameters.Add(param);
                 command.Parameters.Add(toSpaceParam);
 
+                try
+                {
+                    rowsAffected = command.ExecuteNonQuery();
 
-                rowsAffected = command.ExecuteNonQuery();
-                
+                }
+                catch (SqlException e)
+                {
+                    switch (e.Number)
+                    {
+                        case 2627:
+                            searchReport = "Det regnummret finns redan i systemet";
+
+                            break;
+                        default:
+                            throw;
+                    }
+                }
+
             }
             if (rowsAffected > 0)
             {

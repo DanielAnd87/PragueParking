@@ -13,8 +13,8 @@ namespace ParkingLot
             ParkingMenu menu = new ParkingMenu();
             menu.Menu();
             //   TestIncomeReport();
-            TestDataGenerator testDataGenerator = new TestDataGenerator();
-            testDataGenerator.TestData();
+            //TestDataGenerator testDataGenerator = new TestDataGenerator();
+            //testDataGenerator.TestData();
 
             //database.MoveVehicle("en bil", 13);
             //DateTime startDate = DateTime.Now;

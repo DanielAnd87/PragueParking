@@ -28,7 +28,19 @@ namespace MenuLibrary
 
          
         }
-        
+        public static DateTime AskForDate(string welcomeText)
+        {
+            string date = AskForString($"{welcomeText}\n\nFyll i datumet i denna formen: yyyy-MM-dd");
+            try
+            {
+                return DateTime.Parse(date);
+            }
+            catch
+            {
+                return AskForDate(welcomeText);
+            }
+        }
+
         public static string AskForStringWithoutSpecialChar(string questionText)
         {
             Console.Clear();
@@ -106,18 +118,7 @@ namespace MenuLibrary
             }
         }
 
-        public static DateTime AskForDate(string welcomeText)
-        {
-            string date = AskForString($"{welcomeText}\n\nFyll i datumet i denna formen: yyyy-MM-dd");
-            try
-            {
-                return DateTime.Parse(date);
-            }
-            catch
-            {
-                return AskForDate(welcomeText);
-            }
-        }
+        
 
 
 
@@ -128,12 +129,18 @@ namespace MenuLibrary
         /// <param name="alternetives"></param>
         private static void CreatePages(int currentSelected, string[] alternetives)
         {
+            const int pageLength = 20;
+            CreatePages(currentSelected, alternetives, pageLength);
+        }
+
+        private static void CreatePages(int currentSelected, string[] alternetives, int pageLength)
+        {
             int length = alternetives.Length;
-            int leftover = length % 10;
-            int pointerLeftover = currentSelected % 10;
+            int leftover = length % pageLength;
+            int pointerLeftover = currentSelected % pageLength;
             int start;
             int stop;
-            bool isLongList = length > 10;
+            bool isLongList = length > pageLength;
             if (isLongList)
             {
                 if (currentSelected >= alternetives.Length - leftover)
@@ -144,7 +151,7 @@ namespace MenuLibrary
                 else
                 {
                     start = currentSelected - pointerLeftover;
-                    stop = start + 10;
+                    stop = start + pageLength;
                 }
             }
             else

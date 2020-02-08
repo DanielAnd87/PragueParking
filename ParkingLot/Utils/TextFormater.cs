@@ -18,7 +18,7 @@ namespace ParkingLot.Utils
 
         internal static string VehicleReciptString(int id, string vehicleType, int location, string regNum, DateTime startTime)
         {
-            string formatedType = vehicleType == "CAR" ? "Bil" : "Mc";
+            string formatedType = vehicleType == "Car" ? "Bil" : "Mc";
             string formatedMessage = String.Format($"Type: {formatedType} \nReg-nummer: {regNum} \nid: {id} \nplats {location} \nstart time: {startTime.ToString()} \nout time: {DateTime.Now.ToString()}");
             return formatedMessage;
         }

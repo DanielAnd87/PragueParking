@@ -19,10 +19,10 @@ namespace ParkingLot
             while (running)
             {
                 int choice = MenuUtils.AlternetivesMenu(0,
-                                                        new string[] { "Checka in ett fordon", "Checka ut ett fordon", "Checka ut utan kostnad", "Flytta ett fordon", "Sök efter ett fordon", "Se överblicks-karta", "Organisera fordonsplats", "Optimesera alla MC platser", "Visa intäckts-rapport", "Sökbar intäckts-rapport", "Visa fordon som parkerat mer än två dygn", "Avsluta programmet", "Checka ut från lista.", "Lista över parkerade fordon." },
+                                                        new string[] { "Checka in ett fordon", "Checka ut ett fordon", "Checka ut utan kostnad", "Flytta ett fordon", "Sök efter ett fordon", "Se överblicks-karta", "Optimesera alla MC platser", "Visa intäckts-rapport", "Sökbar intäckts-rapport", "Visa fordon som parkerat mer än två dygn", "Checka ut från lista.", "Lista över parkerade fordon.", "Avsluta programmet" },
                                                         "Välkommen till PragueParking!");
                 int checkIn = 0, checkOut = 1, checkOutFree = 2, moveVehicle = 3, search = 4, viewParkinglot = 5; 
-                int organizeSpace = 6, optimizeMcSpace = 7, viewEarnings = 8, searchForEarnings = 9, viewLongParkedVehicles = 10, exit = 11, checkOutFromList = 12, listAllVehicles = 13;
+                int optimizeMcSpace = 6, viewEarnings = 7, searchForEarnings = 8, viewLongParkedVehicles = 9, checkOutFromList = 10, listAllVehicles = 11, exit = 12;
                 if (choice == checkIn)
                 {
                     CheckIn();
@@ -46,10 +46,6 @@ namespace ParkingLot
                 else if (choice == viewParkinglot)
                 {
                     ViewParkingLot();
-                }
-                else if (choice == organizeSpace)
-                {
-                    OrganizeSpace();
                 }
                 else if (choice == optimizeMcSpace)
                 {
@@ -89,7 +85,7 @@ namespace ParkingLot
             string[] regChoices = new string[vehicles.Count];
             for (int i = 0; i < vehicles.Count; i++)
             {
-                regChoices[i] = String.Format($"Regnum: {vehicles[i].RegNum} In time: {vehicles[i].StartTime.ToString()} Parkeringsnummer: {vehicles[i].ParkingNum}");
+                regChoices[i] = String.Format($"Regnum: {vehicles[i].RegNum} In time: {vehicles[i].StartTime.ToString()} Parkeringsnummer: {vehicles[i].ParkingNum+1}");
             }
             foreach (string row in regChoices)
             {
@@ -108,7 +104,7 @@ namespace ParkingLot
             string[] regChoices = new string[vehicles.Count];
             for (int i = 0; i < vehicles.Count; i++)
             {
-                regChoices[i] = String.Format($"Regnum: {vehicles[i].RegNum} In time: {vehicles[i].StartTime.ToString()} Parkeringsnummer: {vehicles[i].ParkingNum}");
+                regChoices[i] = String.Format($"Regnum: {vehicles[i].RegNum} In time: {vehicles[i].StartTime.ToString()} Parkeringsnummer: {vehicles[i].ParkingNum+1}");
             }
 
             int choice = MenuUtils.AlternetivesMenu(0, regChoices, "Choose a vehicle to check out.");
@@ -196,15 +192,6 @@ namespace ParkingLot
             MenuUtils.PauseUntilFeedback("Tryck på en knapp för att återvända till menyn");
         }
 
-        private void OrganizeSpace()
-        {
-            DbHandler handler = new DbHandler();
-            string organizeOrder = handler.OrganizeSpace();
-            Console.Clear();
-
-            Console.WriteLine(organizeOrder);
-            MenuUtils.PauseUntilFeedback(OrderMessage);
-        }
 
         private void CheckOutFree()
         {
@@ -245,15 +232,17 @@ namespace ParkingLot
             string[] freeParkingSpaces = handler.FetchFreeParkingSpaces();
             int parkingspaceChoice = MenuUtils.AlternetivesMenu(0, freeParkingSpaces, "Välj en plats att flytta fordonet");
             string choosenSpot = freeParkingSpaces[parkingspaceChoice];
-            int spaceToMoveFrom = handler.FetchVehicleSpot(regNumber);
-            int spaceToMoveTo = Convert.ToInt32(choosenSpot);
+            int spaceMoveFrom = handler.FetchVehicleSpot(regNumber);
+            int spaceMoveTo = Convert.ToInt32(choosenSpot);
 
-            bool result = handler.MoveVehicle(regNumber, spaceToMoveTo);
+            bool result = handler.MoveVehicle(regNumber, spaceMoveTo);
             Console.Clear();
             if (result)
             {
                 Console.WriteLine("Flytten lyckades!");
-                Console.WriteLine($"Flytta fordonet med reg-nummer {regNumber} från plats {spaceToMoveFrom} till plats {spaceToMoveFrom}");
+
+
+                Console.WriteLine($"Flytta fordonet med reg-nummer {regNumber} från plats {spaceMoveFrom} till plats {spaceMoveTo}");
                 MenuUtils.PauseUntilFeedback(OrderMessage);
             }
             else
